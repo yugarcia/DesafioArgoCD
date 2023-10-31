@@ -27,4 +27,4 @@ jobs:
 
       - name: Deploy to Kubernetes
         run: |
-          helm upgrade --install my-nginx ./my-helm-app/charts/my-nginx
+          helm upgrade --install my-nginx ./DesafioArgoCD/charts/my-nginx
