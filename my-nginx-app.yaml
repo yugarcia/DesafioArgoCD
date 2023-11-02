@@ -4,9 +4,9 @@ metadata:
   name: my-nginx-app
 spec:
   destination:
-    namespace: default # El namespace en el que deseas desplegar la aplicación
+    namespace: argo-cd # El namespace en el que deseas desplegar la aplicación
     server: 'https://localhost:8080' # La URL del servidor de ArgoCD
-  project: default # El proyecto de ArgoCD al que pertenece la aplicación
+  project: argo-cd # El proyecto de ArgoCD al que pertenece la aplicación
   source:
     repoURL: 'https://github.com/yugarcia/DesafioArgoCD.git' # La URL de tu repositorio de Git
     targetRevision: HEAD
