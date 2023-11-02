@@ -19,7 +19,7 @@ jobs:
 
       - name: Log in to ArgoCD
         run: |
-          kubectl config set-context minikube --namespace=argo-cd
+          kubectl config set-context minikube --namespace=default
           kubectl config use-context minikube # Reemplaza con el contexto de tu clúster
           kubectl config view
           kubectl config current-context
