@@ -19,8 +19,8 @@ jobs:
 
       - name: Log in to ArgoCD
         run: |
-          kubectl config set-context --current --namespace=argo-cd
-          kubectl config use-context your-kube-context # Reemplaza con el contexto de tu clúster
+          kubectl config set-context minikube --namespace=argo-cd
+          kubectl config use-context minikube # Reemplaza con el contexto de tu clúster
           kubectl config view
           kubectl config current-context
           kubectl create secret generic argocd-secret --from-literal=server=https://localhost:8080 --from-literal=username=argocd-admin --from-literal=password=$ARGO_PASSWORD
