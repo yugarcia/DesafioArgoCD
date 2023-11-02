@@ -1,21 +1,19 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "my-nginx.fullname" . }}
-  labels:
-    {{- include "my-nginx.labels" . | nindent 4 }}
+  name: nginx-deployment
 spec:
-  replicas: {{ .Values.replicaCount }}
+  replicas: 3
   selector:
     matchLabels:
-      {{- include "my-nginx.selectorLabels" . | nindent 6 }}
+      app: nginx
   template:
     metadata:
       labels:
-        {{- include "my-nginx.selectorLabels" . | nindent 8 }}
+        app: nginx
     spec:
       containers:
-        - name: {{ .Chart.Name }}
-          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+        - name: nginx-container
+          image: nginx:latest
           ports:
-            - containerPort: 80
+            - containerPort: 8080
