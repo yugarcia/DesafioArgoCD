@@ -19,6 +19,7 @@ jobs:
 
       - name: Log in to ArgoCD
         run: |
+          kubectl config set-context minikube
           kubectl config use-context minikube
           kubectl config view
           kubectl config current-context
