@@ -16,6 +16,10 @@ jobs:
         uses: azure/setup-kubectl@v1
         with:
           kubectl-version: 'latest'
+      - name: Install ArgoCD CLI
+        run: |
+          choco install argocd-cli -y
+        if: runner.os == 'Windows'
 
       - name: Log in to ArgoCD
         run: |
