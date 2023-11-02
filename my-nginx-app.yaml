@@ -1,0 +1,19 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: my-nginx-app
+spec:
+  destination:
+    namespace: default # El namespace en el que deseas desplegar la aplicación
+    server: 'https://localhost:8080' # La URL del servidor de ArgoCD
+  project: default # El proyecto de ArgoCD al que pertenece la aplicación
+  source:
+    repoURL: 'https://github.com/yugarcia/DesafioArgoCD.git' # La URL de tu repositorio de Git
+    targetRevision: HEAD
+    path: ./charts/my-nginx # La ruta a la carpeta que contiene el Chart de Helm
+    helm:
+      valueFiles:
+        - ./charts/my-nginx/values.yaml # Ruta a tus valores personalizados de Helm
+  syncPolicy:
+    automated:
+      prune: true # Eliminar recursos no controlados por Git
