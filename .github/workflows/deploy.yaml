@@ -19,12 +19,11 @@ jobs:
 
       - name: Log in to ArgoCD
         run: |
-          kubectl config set-context minikube --namespace=default
-          kubectl config use-context minikube # Reemplaza con el contexto de tu clúster
+          kubectl config use-context minikube
           kubectl config view
           kubectl config current-context
-          kubectl create secret generic argocd-secret --from-literal=server=https://localhost:8080 --from-literal=username=admin --from-literal=password=$ARGO_PASSWORD
-          kubectl get secret argocd-secret
+          argocd login --insecure https://localhost:8080 --username admin --password $ARGO_PASSWORD
+          argocd app sync nginx-app
         env:
           KUBECONFIG: ${{secrets.KUBE_CONFIG}}
           ARGOCD_PASSWORD: ${{ secrets.ARGO_PASSWORD }}
