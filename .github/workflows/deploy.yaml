@@ -23,7 +23,7 @@ jobs:
           kubectl config use-context minikube # Reemplaza con el contexto de tu clúster
           kubectl config view
           kubectl config current-context
-          kubectl create secret generic argocd-secret --from-literal=server=https://localhost:8080 --from-literal=username=argocd-admin --from-literal=password=$ARGO_PASSWORD
+          kubectl create secret generic argocd-secret --from-literal=server=https://localhost:53231 --from-literal=username=argocd-admin --from-literal=password=$ARGO_PASSWORD
           kubectl get secret argocd-secret
         env:
           KUBECONFIG: ${{secrets.KUBE_CONFIG}}
