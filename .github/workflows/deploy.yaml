@@ -1,4 +1,4 @@
-name: Deploy to Kubernetes
+name: Continuous Deployment
 
 on:
   push:
@@ -12,19 +12,25 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Setup Helm
-        uses: Azure/setup-helm@v1
+      - name: Set up kubectl
+        uses: azure/setup-kubectl@v1
         with:
-          version: 'latest'
+          kubectl-version: 'latest'
 
-      - name: Login to DockerHub
-        run: echo ${{ secrets.DOCKERHUB_TOKEN }} | docker login -u ${{ secrets.DOCKERHUB_USERNAME }} --password-stdin
-
-      - name: Build and push Docker image
+      - name: Log in to ArgoCD
         run: |
-          docker build -t yugarcia/desafio_imagen:latest .
-          docker push yugarcia/desafio_imagen:latest
+          kubectl config set-context --current --namespace=argo-cd
+          kubectl config use-context your-kube-context # Reemplaza con el contexto de tu clúster
+          kubectl config view
+          kubectl config current-context
+          kubectl create secret generic argocd-secret --from-literal=server=https://localhost:8080 --from-literal=username=argocd-admin --from-literal=password=$ARGO_PASSWORD
+          kubectl get secret argocd-secret
+        env:
+          KUBECONFIG: ${{secrets.KUBE_CONFIG}}
+          ARGOCD_PASSWORD: ${{ secrets.ARGO_PASSWORD }}
 
-      - name: Deploy to Kubernetes
+      - name: Sync Application with ArgoCD
         run: |
-          helm upgrade --install my-nginx ./charts/my-nginx
+          argocd app sync nginx-app --auth-token $ARGO_PASSWORD
+        env:
+          ARGOCD_OPTS: --insecure

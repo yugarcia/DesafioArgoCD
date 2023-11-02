@@ -1,19 +1,13 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: my-nginx-app
+  name: nginx-app
 spec:
-  destination:
-    namespace: argo-cd # El namespace en el que deseas desplegar la aplicación
-    server: 'https://localhost:8080' # La URL del servidor de ArgoCD
-  project: argo-cd # El proyecto de ArgoCD al que pertenece la aplicación
+  project: default # Nombre del proyecto de ArgoCD
   source:
-    repoURL: 'https://github.com/yugarcia/DesafioArgoCD.git' # La URL de tu repositorio de Git
-    targetRevision: HEAD
-    path: ./charts/my-nginx # La ruta a la carpeta que contiene el Chart de Helm
-    helm:
-      valueFiles:
-        - ./charts/my-nginx/values.yaml # Ruta a tus valores personalizados de Helm
-  syncPolicy:
-    automated:
-      prune: true # Eliminar recursos no controlados por Git
+    repoURL: 'https://github.com/tu-usuario/tu-repo.git' # URL de tu repositorio de GitHub
+    path: ./nginx-deployment.yaml # Ruta al archivo de manifiesto de la aplicación
+    targetRevision: main # Rama de Git
+  destination:
+    server: 'https://localhost:8080' # URL del servidor de ArgoCD
+    namespace: argo-cd # Namespace de Kubernetes
