@@ -20,7 +20,7 @@ jobs:
 
       - name: Configure kubectl
         run: |
-          kubectl config set-context minikube --namespace=default --server=https://127.0.0.1:61886
+          kubectl config set-context minikube --namespace=default --server=https://127.0.0.1:62670
           kubectl config use-context minikube
         env:
           KUBECONFIG: ${{secrets.KUBE_CONFIG}}
