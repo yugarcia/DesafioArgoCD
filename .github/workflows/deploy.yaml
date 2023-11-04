@@ -20,8 +20,10 @@ jobs:
 
       - name: Configure kubectl
         run: |
-          kubectl config set-context minikube # Reemplaza con el contexto de tu clúster
-          kubectl config use-context minikube # Reemplaza con el contexto de tu clúster
+          kubectl config set-context minikube --namespace=default --server=https://127.0.0.1:61886
+          kubectl config use-context minikube
+        env:
+          KUBECONFIG: ${{secrets.KUBE_CONFIG}}
 
       - name: Deploy Nginx Application
         run: |
