@@ -1,40 +1,30 @@
-name: Continuous Deployment
+name: Deploy Nginx Application
 
 on:
   push:
     branches:
-      - main
+      - master
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
+
     steps:
-      - name: Checkout code
+      - name: Checkout Repository
         uses: actions/checkout@v2
 
-      - name: Set up kubectl
+      - name: Install kubectl
         uses: azure/setup-kubectl@v1
         with:
-          kubectl-version: 'latest'
-      - name: Install ArgoCD CLI
-        run: |
-          choco install argocd-cli -y
-        if: runner.os == 'Windows'
+          k8s-version: 'latest'
 
-      - name: Log in to ArgoCD
+      - name: Configure kubectl
         run: |
-          kubectl config set-context minikube
-          kubectl config use-context minikube
-          kubectl config view
-          kubectl config current-context
-          argocd login --insecure https://localhost:8080 --username admin --password $ARGO_PASSWORD
-          argocd app sync nginx-app
-        env:
-          KUBECONFIG: ${{secrets.KUBE_CONFIG}}
-          ARGOCD_PASSWORD: ${{ secrets.ARGO_PASSWORD }}
+          kubectl config set-context minikube # Reemplaza con el contexto de tu clúster
+          kubectl config use-context minikube # Reemplaza con el contexto de tu clúster
 
-      - name: Sync Application with ArgoCD
+      - name: Deploy Nginx Application
         run: |
-          argocd app sync nginx-app --auth-token $ARGO_PASSWORD
+          helm upgrade --install my-nginx ./chart/my-nginx/chart
         env:
-          ARGOCD_OPTS: --insecure
+          HELM_CHART_VERSION: '1.0.0' # Cambia esto según la versión de tu Chart
