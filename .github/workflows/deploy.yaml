@@ -1,4 +1,4 @@
-name: Deploy Nginx Application
+name: Build Docker Image
 
 on:
   push:
@@ -6,27 +6,26 @@ on:
       - main
 
 jobs:
-  deploy:
+  build:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout Repository
+      - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Install kubectl
-        uses: azure/setup-kubectl@v1
-        with:
-          k8s-version: 'latest'
+      - name: Set up Docker
+        uses: docker/setup-buildx-action@v4
 
-      - name: Configure kubectl
+      - name: Build Docker image
         run: |
-          kubectl config set-context minikube --namespace=default --server=https://127.0.0.1:62670
-          kubectl config use-context minikube
+          docker build -t my-node-app:latest ./app
+          docker tag my-node-app:latest my-node-app:latest
         env:
-          KUBECONFIG: ${{secrets.KUBE_CONFIG}}
+          DOCKER_BUILDKIT: 1
 
-      - name: Deploy Nginx Application
+      - name: Publish Docker image to Docker Hub
         run: |
-          helm upgrade --install my-nginx ./chart/my-nginx/chart
+          echo $DOCKER_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin
+          docker push my-node-app:latest
         env:
-          HELM_CHART_VERSION: '0.1.0' # Cambia esto según la versión de tu Chart
+          DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+          DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}

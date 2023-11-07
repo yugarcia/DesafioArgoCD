@@ -1,0 +1,20 @@
+replicaCount: 3
+image:
+  repository: my-node-app
+  tag: latest
+  pullPolicy: IfNotPresent
+
+service:
+  name: my-node-app
+  type: LoadBalancer  # Cambia esto a NodePort si prefieres
+  port: 80
+  targetPort: 80
+
+ingress:
+  enabled: false
+  annotations: {}
+  hosts:
+    - host: chart-example.local
+      paths: []
+
+resources: {}
