@@ -21,5 +21,4 @@ jobs:
       - name: Build and push Docker image
         run: |
           docker build -t my-node-app:latest ./app
-          docker tag my-node-app:latest my-node-app:latest
           docker push yugarcia/my-node-app:latest
