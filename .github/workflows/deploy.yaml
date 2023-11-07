@@ -22,3 +22,12 @@ jobs:
         run: |
           docker build -t yugarcia/my-node-app:latest ./app
           docker push yugarcia/my-node-app:latest
+      - name: Install Helm
+        uses: azure/setup-helm@v3
+        env:
+          GITHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Publish Helm Chart
+        uses: helm/chart-releaser-action@v1.5.0
+        env:
+          CR_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
