@@ -20,5 +20,5 @@ jobs:
 
       - name: Build and push Docker image
         run: |
-          docker build -t yugarcia/my-node-app:latest .
+          docker build -t yugarcia/my-node-app:latest ./app
           docker push yugarcia/my-node-app:latest
